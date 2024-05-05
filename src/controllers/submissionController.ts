@@ -5,6 +5,7 @@ import { CreateSubmissionDTO } from '../dtos/CreateSubmissionDTO';
 
 export const addSubmission = (req: Request, res: Response) => {
   const submissionDto = req.body as CreateSubmissionDTO;
+  console.log(submissionDto);
   return res.status(HttpStatus.CREATED).json({
     success: true,
     error: {},
