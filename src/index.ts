@@ -2,7 +2,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import serverConfig from './config/serverConfig';
-import submissionQueueProducer from './producers/submissionQueueProducer';
 import SampleWorker from './workers/sampleWorker';
 import SubmissionWorker from './workers/submissionWorker';
 import bullBoardAdapter from './config/bullBoardConfig';
@@ -29,46 +28,46 @@ app.listen(serverConfig.PORT, () => {
   SampleWorker(SAMPLE_QUEUE);
   SubmissionWorker(SUBMISSION_QUEUE);
 
-  const userCode = `
-  
-    class Solution {
-      public:
-      vector<int> permute() {
-          vector<int> v;
-          v.push_back(10);
-          return v;
-      }
-    };
-  `;
+  //   const userCode = `
 
-  const code = `
-  #include<iostream>
-  #include<vector>
-  #include<stdio.h>
-  using namespace std;
-  
-  ${userCode}
+  //     class Solution {
+  //       public:
+  //       vector<int> permute() {
+  //           vector<int> v;
+  //           v.push_back(10);
+  //           return v;
+  //       }
+  //     };
+  //   `;
 
-  int main() {
+  //   const code = `
+  //   #include<iostream>
+  //   #include<vector>
+  //   #include<stdio.h>
+  //   using namespace std;
 
-    Solution s;
-    vector<int> result = s.permute();
-    for(int x : result) {
-      cout<<x<<" ";
-    }
-    cout<<endl;
-    return 0;
-  }
-  `;
+  //   ${userCode}
 
-  const inputCase = `10
-`;
+  //   int main() {
 
-  submissionQueueProducer({
-    '1234': {
-      language: 'CPP',
-      inputCase,
-      code,
-    },
-  });
+  //     Solution s;
+  //     vector<int> result = s.permute();
+  //     for(int x : result) {
+  //       cout<<x<<" ";
+  //     }
+  //     cout<<endl;
+  //     return 0;
+  //   }
+  //   `;
+
+  //   const inputCase = `10
+  // `;
+
+  //   submissionQueueProducer({
+  //     '1234': {
+  //       language: 'CPP',
+  //       inputCase,
+  //       code,
+  //     },
+  //   });
 });
