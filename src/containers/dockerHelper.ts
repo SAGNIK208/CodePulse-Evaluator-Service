@@ -1,7 +1,7 @@
 import DockerStreamOutput from '../types/dockerStreamOutput';
 import { DOCKER_STREAM_HEADER_SIZE } from '../constants';
 
-export default function decodeDockerStream(buffer: Buffer): DockerStreamOutput {
+export function decodeDockerStream(buffer: Buffer): DockerStreamOutput {
   let offset = 0;
 
   const output: DockerStreamOutput = { stdout: '', stderr: '' };
@@ -23,4 +23,24 @@ export default function decodeDockerStream(buffer: Buffer): DockerStreamOutput {
   }
 
   return output;
+}
+
+export function fetchDecodedStream(
+  loggerStream: NodeJS.ReadableStream,
+  rawLogBuffer: Buffer[],
+): Promise<string> {
+  return new Promise((res, rej) => {
+    loggerStream.on('end', () => {
+      console.log(rawLogBuffer);
+      const completeBuffer = Buffer.concat(rawLogBuffer);
+      const decodedStream = decodeDockerStream(completeBuffer);
+      console.log(decodedStream);
+      console.log(decodedStream.stdout);
+      if (decodedStream.stderr) {
+        rej(decodedStream.stderr);
+      } else {
+        res(decodedStream.stdout);
+      }
+    });
+  });
 }
