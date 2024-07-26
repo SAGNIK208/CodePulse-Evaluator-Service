@@ -49,8 +49,16 @@ class JavaExecutor implements CodeExecutorStrategy {
         loggerStream,
         rawLogBuffer,
       );
-      return { output: codeResponse, status: 'COMPLETED' };
+      if (codeResponse.trim() === outputTestCase.trim()) {
+        return { output: codeResponse, status: 'SUCCESS' };
+      } else {
+        return { output: codeResponse, status: 'WA' };
+      }
     } catch (error) {
+      console.log('Error occurred', error);
+      if (error === 'TLE') {
+        await javaDockerContainer.kill();
+      }
       return { output: error as string, status: 'ERROR' };
     } finally {
       await javaDockerContainer.remove();
